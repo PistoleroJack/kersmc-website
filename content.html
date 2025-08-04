@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titel van pagina</title>
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+    <h1 class="title has-text-centered">🎬 KersMC Content</h1>
+    <p class="subtitle has-text-centered">Bekijk hier de nieuwste video’s van onze communityleden!</p>
+
+    <div class="columns is-multiline is-centered mt-6">
+
+        <!-- KersMC Video -->
+        <div class="column is-half">
+            <div class="box">
+                <h2 class="title is-4">
+                    <img src="logos/YouTube-Logo-1080x1080.png" alt="YouTube" style="height: 24px; margin-right: 8px;">
+                    KersMC
+                </h2>
+                <div class="video-container">
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/N7BV1Jsydwo"
+                        title="KersMC video" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tieskuhh Video -->
+        <div class="column is-half">
+            <div class="box">
+                <h2 class="title is-4">
+                    <img src="logos/YouTube-Logo-1080x1080.png" alt="YouTube" style="height: 24px; margin-right: 8px;">
+                    Tieskuhh
+                </h2>
+                <div class="video-container">
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/_gIIRnn-S3g"
+                        title="Tieskuhh video" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- MarsKoenker Video -->
+        <div class="column is-half">
+            <div class="box">
+                <h2 class="title is-4">
+                    <img src="logos/YouTube-Logo-1080x1080.png" alt="YouTube" style="height: 24px; margin-right: 8px;">
+                    MarsKoenker
+                </h2>
+                <div class="video-container">
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/4HyJ8gHkXZA"
+                        title="MarsKoenker video" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advertentie -->
+        <div class="column is-half">
+            <div class="box">
+                <h2 class="title is-4">
+                    Jouw video hier?
+                </h2>
+                <p>
+                    Ook jouw video op de KersMC-website? 🎥<br>
+
+                    Maak een <strong>KersMC-gerelateerde video</strong> en heb minimaal <strong>500 volgers</strong>.  
+                    Open vervolgens een ticket via onze <a href="discord.html">Discord</a> om een plek te krijgen op deze pagina!
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Gekopieerd: " + text);
+      }).catch(err => {
+        alert("Kopiëren mislukt: " + err);
+      });
+    }
+
+    // Laad header en footer
+    function loadHTML(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadHTML("header-placeholder", "partials/header.html");
+    loadHTML("footer-placeholder", "partials/footer.html");
+  </script>
+</body>
+</html>
