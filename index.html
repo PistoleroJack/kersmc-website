@@ -4,30 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KersMC</title>
-  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-  <section class="header-bar">
-    <button class="login-button" onclick="window.location.href='/login'">Login</button>
 
-    <div class="ip-poort-container">
-      <div class="ip-button" onclick="copyText('Play.KersMC.nl')">IP: Play.KersMC.nl</div>
-      <h1 class="main-title"><a href="index.html" style="color: white; text-decoration: none;">KersMC</a></h1>
-      <div class="ip-button" onclick="copyText('37712')">Poort: 37712</div>
-    </div>
-
-    <div class="nav-buttons">
-      <a href="/algemeen" class="button is-light">Algemeen</a>
-      <a href="/survival/algemeen" class="button is-light">Survival</a>
-      <a href="/hardcore/algemeen" class="button is-light">Hardcore</a>
-      <a href="/pixelmon/algemeen" class="button is-light">Pixelmon</a>
-      <a href="/pvp/algemeen" class="button is-light">PvP</a>
-      <a href="/content" class="button is-light">Content</a>
-      <a href="https://kersmc.tebex.com" target="_blank" class="button is-light">Shop</a>
-    </div>
-  </section>
+  <div id="header-container"></div>
 
   <section class="section">
     <img src="logos/KersMC_logo.png" alt="KersMC Logo" style="max-width: 200px; margin-bottom: 20px;">
@@ -55,32 +38,33 @@
       </div>
     </div>
   </section>
-  
-<section class="section has-background-light">
-  <div class="container has-text-centered">
-    <h2 class="title is-3" style="color: #363636;">Officiële partner</h2>
-    <p style="font-size: 1.2rem;">KersMC is trots om samen te werken met Etheron Hosting!</p>
-    
-    <img src="logos/etheron-logo.png" alt="Etheron Logo" style="max-width: 200px; margin: 0 auto 20px auto; display: block;">
 
-    <a href="https://etheron.nl" target="_blank" class="button is-link is-medium mt-4">
-      Bezoek Etheron.nl
-    </a>
-  </div>
-</section>
+  <section class="section has-background-light">
+    <div class="container has-text-centered">
+      <h2 class="title is-3" style="color: #363636;">Officiële partner</h2>
+      <p style="font-size: 1.2rem;">KersMC is trots om samen te werken met Etheron Hosting!</p>
+      <img src="logos/etheron-logo.png" alt="Etheron Logo" style="max-width: 200px; margin: 0 auto 20px auto; display: block;">
+      <a href="https://etheron.nl" target="_blank" class="button is-link is-medium mt-4">Bezoek Etheron.nl</a>
+    </div>
+  </section>
 
-  <footer class="footer">
-    <p>© 2025 KersMC. Alle rechten voorbehouden.</p>
-  </footer>
+  <div id="footer-container"></div>
 
   <script>
+    // Laadt header en footer vanaf externe bestanden
+    fetch('partials/header.html').then(res => res.text()).then(data => {
+      document.getElementById('header-container').innerHTML = data;
+    });
+    fetch('partials/footer.html').then(res => res.text()).then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+
     function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Gekopieerd: " + text);
-      }).catch(err => {
-        alert("Kopiëren mislukt: " + err);
-      });
+      navigator.clipboard.writeText(text)
+        .then(() => alert("Gekopieerd: " + text))
+        .catch(err => alert("Kopiëren mislukt: " + err));
     }
   </script>
+
 </body>
 </html>
