@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titel van pagina</title>
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+  <div class="container">
+
+    <!-- Eigenaren -->
+    <h1 class="title has-text-centered">Eigenaren</h1>
+    <div class="columns is-multiline is-centered">
+      <div class="column is-half team-member">
+        <img src="team-members/Tieskuhh.png" alt="Tieskuhh">
+        <h2 class="title is-4">Tieskuhh</h2>
+        <p class="subtitle is-6">Lid sinds: 19 januari 2025</p>
+        <p>Placeholder</p>
+      </div>
+      <div class="column is-half team-member">
+        <img src="team-members/Tijn.png" alt="Tijn">
+        <h2 class="title is-4">Tijn</h2>
+        <p class="subtitle is-6">Lid sinds: 19 januari 2025</p>
+        <p>Placeholder</p>
+      </div>
+    </div>
+
+    <!-- Hoofd Moderator -->
+    <h1 class="title has-text-centered mt-6">Hoofd Moderator</h1>
+    <div class="columns is-centered">
+      <div class="column is-half team-member">
+        <img src="team-members/Marskoenker.png" alt="MarsKoenker">
+        <h2 class="title is-4">MarsKoenker</h2>
+        <p class="subtitle is-6">Lid sinds: 25 januari 2025</p>
+        <p>Placeholder</p>
+      </div>
+    </div>
+
+    <!-- Moderators -->
+    <h1 class="title has-text-centered mt-6">Moderator's</h1>
+    <div class="columns is-multiline is-centered">
+      <div class="column is-half team-member">
+        <img src="team-members/Juultieee.jpeg" alt="xJuultieee_">
+        <h2 class="title is-4">xJuultieee_</h2>
+        <p class="subtitle is-6">Lid sinds: 15 februari 2025</p>
+        <p>Placeholder</p>
+      </div>
+      <div class="column is-half team-member">
+        <img src="team-members/Pistolerojack.png" alt="Pistolerojack">
+        <h2 class="title is-4">Pistolerojack</h2>
+        <p class="subtitle is-6">Lid sinds: 25 februari 2025</p>
+        <p>Ik ben iemand van de technische aspecten, zo bouw ik veel farms en maak ik vaak gebruik van redstone.
+        Niet alleen in Minecraft doe ik veel technische dingen, zo heb ik ook deze website gemaakt en ik zorg dat de website online blijft.
+        Mocht je vragen hebben kan je mij altijd bereiken via Discord.</p>
+      </div>
+      <div class="column is-half team-member">
+        <img src="team-members/kjell.png" alt="Kjell">
+        <h2 class="title is-4">Kjell</h2>
+        <p class="subtitle is-6">Lid sinds: 3 april 2025</p>
+        <p>Placeholder</p>
+      </div>
+    </div>
+
+    <!-- Jr. Moderators -->
+    <h1 class="title has-text-centered mt-6">Jr. Moderator's</h1>
+    <div class="columns is-multiline is-centered">
+      <div class="column is-half team-member">
+        <img src="team-members/Christian.png" alt="Christian">
+        <h2 class="title is-4">Christian</h2>
+        <p class="subtitle is-6">Lid sinds: 8 april 2025</p>
+        <p>Placeholder</p>
+      </div>
+      <div class="column is-half team-member">
+        <img src="team-members/Jd.png" alt="Jd">
+        <h2 class="title is-4">Jd</h2>
+        <p class="subtitle is-6">Lid sinds: 8 april 2025</p>
+        <p>Placeholder</p>
+      </div>
+        <div class="column is-half team-member">
+        <img src="team-members/Malltix.png" alt="Jd">
+        <h2 class="title is-4">Malltix</h2>
+        <p class="subtitle is-6">Lid sinds: 23 april 2025</p>
+        <p>Placeholder</p>
+      </div>
+        <div class="column is-half team-member">
+        <img src="team-members/LikeAPizza.png" alt="Jd">
+        <h2 class="title is-4">Pizza</h2>
+        <p class="subtitle is-6">Lid sinds: 24 april 2025</p>
+        <p>Placeholder</p>
+      </div>
+    </div>
+
+    <!-- Interesse in staff -->
+    <div class="content has-text-centered mt-6">
+      <p><strong>Ook staff worden?</strong> Maak een ticket aan op de <a href="/kersmc/discord">Discord</a> server om alle eisen te horen.</p>
+    </div>
+
+  </div>
+</section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Gekopieerd: " + text);
+      }).catch(err => {
+        alert("Kopiëren mislukt: " + err);
+      });
+    }
+
+    // Laad header en footer
+    function loadHTML(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadHTML("header-placeholder", "partials/header.html");
+    loadHTML("footer-placeholder", "partials/footer.html");
+  </script>
+</body>
+</html>
