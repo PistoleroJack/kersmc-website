@@ -1,0 +1,101 @@
+
+.header-bar {
+  background-color: #ff0707;
+  color: white;
+  padding: 20px 10%;
+  text-align: center;
+  position: relative;
+}
+
+.login-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.main-title {
+  font-size: 3rem;
+  margin: 10px 0;
+  position: relative;
+}
+
+.ip-poort-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 150px;
+  margin-top: 10px;
+}
+
+.ip-button {
+  background-color: white;
+  color: black;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  user-select: none;
+}
+
+.ip-button:hover {
+  background-color: #f0f0f0;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.nav-buttons a {
+  text-decoration: none;
+}
+
+.section {
+  text-align: center;
+  padding: 60px 10% 80px 10%;
+  font-size: 1.2rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+}
+
+.gamemode-section {
+  margin-top: 60px;
+}
+
+.gamemode-box {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gamemode-box h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #f4f4f4;
+  margin-top: 50px;
+}
