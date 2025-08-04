@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titel van pagina</title>
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+  <h1 class="title has-text-centered">KersMC Discord</h1>
+  <p class="subtitle has-text-centered">Mis niets van KersMC – join de community!</p>
+
+  <div class="columns is-vcentered mt-6">
+
+    <!-- Linkerkant: Voordelen (linksboven uitgelijnd) -->
+    <div class="column is-flex is-align-items-flex-start is-justify-content-flex-start">
+      <div class="box" style="width: 100%;">
+        <h2 class="title is-4">🎁 Voordelen van onze Discord</h2>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>✅ <strong>Live serverstatus:</strong> Blijf real-time op de hoogte van de server.</li>
+          <li>📢 <strong>Mededelingen:</strong> Belangrijke updates en events.</li>
+          <li>🛠️ <strong>Updates:</strong> Changelogs en patch notes direct in je feed.</li>
+          <li>📦 <strong>Modpacks:</strong> Handleidingen en links.</li>
+          <li>🔔 <strong>KersMC video's:</strong> Ontvang een melding bij nieuwe content.</li>
+          <li>📊 <strong>Stemmen:</strong> Help mee beslissen over de toekomst van de server.</li>
+          <li>❓ <strong>Command-uitleg:</strong> Handige command guides.</li>
+          <li>👀 <strong>Teasers:</strong> Krijg als eerste toegang tot sneak peeks!</li>
+          <li>💬 <strong>Chat:</strong> Klets gezellig met de community.</li>
+          <li>🎟️ <strong>Tickets:</strong> Stel je vragen of meld iets aan staff via ons ticketsysteem.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Rechterkant: Discord Widget -->
+    <div class="column">
+      <div class="card" style="box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 16px;">
+        <div class="card-content">
+          <h2 class="title is-4 has-text-centered">Neem een kijkje wie er allemaal online is!</h2>
+          <div class="discord-widget-container" style="border-radius: 12px; overflow: hidden; display: flex; justify-content: center;">
+            <iframe src="https://discord.com/widget?id=1330549940107219016&theme=dark" width="500" height="500"
+              allowtransparency="true" frameborder="0"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Gekopieerd: " + text);
+      }).catch(err => {
+        alert("Kopiëren mislukt: " + err);
+      });
+    }
+
+    // Laad header en footer
+    function loadHTML(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadHTML("header-placeholder", "partials/header.html");
+    loadHTML("footer-placeholder", "partials/footer.html");
+  </script>
+</body>
+</html>
