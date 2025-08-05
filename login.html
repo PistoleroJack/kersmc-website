@@ -44,7 +44,7 @@
 </head>
 <body>
   <div class="login-box">
-    <img src="/logos/KersMC_logo.png" alt="KersMC Logo" />
+    <img src="logos/KersMC_logo.png" alt="KersMC Logo" style="max-width: 200px; margin-bottom: 20px;">
     <h1>KersMC Inloggen</h1>
     <p>Klik hieronder om in te loggen met je account.</p>
     <button class="button is-kers mt-4" onclick="login()">Log in met Auth0</button>
@@ -55,7 +55,7 @@
   <script>
     const auth0Client = new auth0.Auth0Client({
       domain: "kersmc.eu.auth0.com",          // ✅ Jouw domein
-      client_id: "JOUW_CLIENT_ID_HIER",       // ✅ Vervang dit!
+      client_id: "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A",       // ✅ Vervang dit!
       redirect_uri: "https://kersmc.nl/hub/owner" // ✅ Jouw redirect pagina
     });
 
