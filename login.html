@@ -1,98 +1,67 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Farming Boys</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #ffffff;
-            font-family: Arial, sans-serif;
-        }
-
-        .login-container {
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-container h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .login-container p {
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .login-container input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .login-container button {
-            background-color: #A0C213;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .login-container button:hover {
-            background-color: #8cab11;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - KersMC</title>
+  <link rel="icon" type="image/png" href="/logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .login-box {
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .login-box h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #ff0707;
+    }
+    .login-box img {
+      max-width: 150px;
+      margin-bottom: 20px;
+    }
+    .button.is-kers {
+      background-color: #ff0707;
+      color: white;
+      font-weight: bold;
+    }
+    .button.is-kers:hover {
+      background-color: #e60000;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>KersMC Inlog</h1>
-        <p>Wachtwoord invoeren</p>
-        <input type="password" id="passwordInput" placeholder="Voer je wachtwoord in">
-        <p id="errorMessage" class="error-message" style="display: none;">Onjuist wachtwoord. Probeer opnieuw.</p>
-        <button id="loginButton">Inloggen</button>
-    </div>
+  <div class="login-box">
+    <img src="/logos/KersMC_logo.png" alt="KersMC Logo" />
+    <h1>KersMC Inloggen</h1>
+    <p>Klik hieronder om in te loggen met je account.</p>
+    <button class="button is-kers mt-4" onclick="login()">Log in met Auth0</button>
+  </div>
 
-    <script>
-        const loginButton = document.getElementById('loginButton');
-        const passwordInput = document.getElementById('passwordInput');
-        const errorMessage = document.getElementById('errorMessage');
+  <!-- Auth0 JavaScript SDK -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+  <script>
+    const auth0Client = new auth0.Auth0Client({
+      domain: "kersmc.eu.auth0.com",          // ✅ Jouw domein
+      client_id: "JOUW_CLIENT_ID_HIER",       // ✅ Vervang dit!
+      redirect_uri: "https://kersmc.nl/hub/owner" // ✅ Jouw redirect pagina
+    });
 
-        // Correcte wachtwoorden en bijbehorende routes
-        const routes = {
-  "Github.Jack": "https://github.com/PistoleroJack/kersmc"
-        };
-
-        loginButton.addEventListener('click', () => {
-            const enteredPassword = passwordInput.value;
-
-            // Controleer of het ingevoerde wachtwoord geldig is
-            if (routes[enteredPassword]) {
-                sessionStorage.setItem('loggedIn', 'true'); // Markeer gebruiker als ingelogd
-                window.location.href = routes[enteredPassword]; // Stuur naar de juiste pagina
-            } else {
-                errorMessage.style.display = 'block'; // Toon foutmelding
-            }
-        });
-    </script>
+    async function login() {
+      await auth0Client.loginWithRedirect();
+    }
+  </script>
 </body>
 </html>
