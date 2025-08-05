@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titel van pagina</title>
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+    <h1 class="hero-title">Pagina Titel</h1>
+    <p>Hier komt de unieke inhoud van deze pagina.</p>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Gekopieerd: " + text);
+      }).catch(err => {
+        alert("Kopiëren mislukt: " + err);
+      });
+    }
+
+    // Laad header en footer
+    function loadHTML(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadHTML("header-placeholder", "partials/header.html");
+    loadHTML("footer-placeholder", "partials/footer.html");
+  </script>
+</body>
+</html>
