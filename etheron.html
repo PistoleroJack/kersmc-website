@@ -2,7 +2,6 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="3;url=https://etheron.nl">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Doorgestuurd naar Etheron.nl</title>
   <style>
@@ -31,5 +30,15 @@
     en wordt automatisch doorgestuurd naar <strong>Etheron.nl</strong>.<br><br>
     Even geduld... ⏳
   </div>
+
+  <script>
+    // Na 3 seconden
+    setTimeout(() => {
+      // Nieuw tabblad openen
+      window.open('https://etheron.nl', '_blank');
+      // Huidig tabblad terug naar vorige pagina
+      window.history.back();
+    }, 3000);
+  </script>
 </body>
 </html>
