@@ -110,3 +110,58 @@
   margin-right: auto;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+
+.red-line {
+  width: 80%;
+  height: 4px;
+  background-color: #ff0707;
+  margin: 20px auto;
+}
+
+.copy-box {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+.copy-box:hover {
+  background-color: #e0e0e0;
+}
+.copy-box::after {
+  content: '\1F4CB';
+  margin-left: 10px;
+}
+
+.rules-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  text-align: left;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.rules-box {
+  width: 45%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.rules-box h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+.rules-box ul {
+  list-style-type: none;
+  padding: 0;
+}
+.rules-box li {
+  margin: 10px 0;
+}
+.rules-box li strong {
+  color: #d9534f;
+}
