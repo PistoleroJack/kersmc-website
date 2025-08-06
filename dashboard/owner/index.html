@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Owner Hub - KersMC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" href="/logos/KersMC_logo.png">
+  <style>
+    .tile-link {
+      transition: all 0.2s ease;
+    }
+    .tile-link:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3">Owner Dashboard</h2>
+      <div class="columns is-multiline">
+
+        <div class="column is-one-third">
+          <a href="pagina1.html" class="box tile-link has-background-danger has-text-white">
+            <h3 class="title is-4">Voorbeeld tegel 1</h3>
+            <p>Beschrijving van tegel 1</p>
+          </a>
+        </div>
+
+        <div class="column is-one-third">
+          <a href="pagina2.html" class="box tile-link has-background-danger has-text-white">
+            <h3 class="title is-4">Voorbeeld tegel 2</h3>
+            <p>Beschrijving van tegel 2</p>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch("/hub/partials/hub-header.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("header-placeholder").innerHTML = data);
+
+    fetch("/hub/partials/hub-footer.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("footer-placeholder").innerHTML = data);
+  </script>
+</body>
+</html>
