@@ -1,36 +1,46 @@
-// auth.js
-const auth0Domain = "kersmc.eu.auth0.com";
-const auth0ClientId = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A"; // <-- Vul jouw Client ID in
-const requiredRoles = ["owner", "admin", "vip", "speler"]; // Pas aan indien nodig
+// /dashboard/js/auth.js
 
-let auth0Client;
+const auth0 = await createAuth0Client({
+  domain: "kersmc.eu.auth0.com",
+  client_id: "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A",
+  cacheLocation: "localstorage",
+  useRefreshTokens: true
+});
 
-async function initAuth0() {
-  auth0Client = await createAuth0Client({
-    domain: auth0Domain,
-    client_id: auth0ClientId,
-    cacheLocation: "localstorage",
-    useRefreshTokens: true
+const isAuthenticated = await auth0.isAuthenticated();
+
+if (!isAuthenticated) {
+  // Als gebruiker niet is ingelogd, start login
+  await auth0.loginWithRedirect({
+    redirect_uri: window.location.href
   });
+} else {
+  const user = await auth0.getUser();
+  const token = await auth0.getIdTokenClaims();
+  const roles = token["https://kersmc.nl/roles"] || [];
 
-  const isAuthenticated = await auth0Client.isAuthenticated();
+  // Automatisch toegang voor "speler"
+  const extraToegestaan = "speler";
 
-  if (!isAuthenticated) {
-    return auth0Client.loginWithRedirect({
-      redirect_uri: window.location.origin + window.location.pathname,
-    });
-  }
+  // Welke rol is vereist op deze pagina?
+  const vereisteRol = bepaalRolVoorPagina();
 
-  const tokenClaims = await auth0Client.getIdTokenClaims();
-  const roles = tokenClaims["https://kersmc.nl/roles"] || [];
-
-  const hasAccess = roles.some(role => requiredRoles.includes(role));
-
-  if (!hasAccess) {
+  if (!roles.includes(vereisteRol) && vereisteRol !== extraToegestaan) {
     window.location.href = "/dashboard/wachten.html";
   }
+
+  // ✅ Gebruiker mag blijven
 }
 
-window.onload = () => {
-  initAuth0();
-};
+// Deze functie bepaalt de juiste rol op basis van de URL
+function bepaalRolVoorPagina() {
+  const path = window.location.pathname;
+
+  if (path.includes("/dashboard/owner/")) return "owner";
+  if (path.includes("/dashboard/admin/")) return "admin";
+  if (path.includes("/dashboard/omega/")) return "omega";
+  if (path.includes("/dashboard/speler/")) return "speler";
+  
+  // Geen specifieke rol nodig
+  return "speler"; // fallback
+}
