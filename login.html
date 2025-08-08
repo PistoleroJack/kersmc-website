@@ -1,3 +1,4 @@
+<!-- /login.html -->
 <!doctype html>
 <html lang="nl">
 <head>
@@ -19,7 +20,7 @@
     </div>
   </div>
 
-  <!-- Auth0 SDK v2 -->
+  <!-- Auth0 SDK (v2) -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 
   <script>
@@ -27,12 +28,17 @@
     const AUTH0_DOMAIN = "kersmc.eu.auth0.com";
     const AUTH0_CLIENT_ID = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A";
 
-    // Waar willen we naartoe terugsturen? (veilig maken, alleen relatieve paden)
+    // Haal returnTo (waar de gebruiker heen wilde) uit de query string
     const url = new URL(window.location.href);
     const raw = url.searchParams.get('returnTo') || '/dashboard/';
     const returnTo = raw.startsWith('/') ? raw : '/dashboard/';
 
     const redirectUri = window.location.origin + '/dashboard/callback.html';
+
+    // Wacht tot SDK geladen is
+    while (typeof createAuth0Client === 'undefined') {
+      await new Promise(r => setTimeout(r, 50));
+    }
 
     const auth0 = await createAuth0Client({
       domain: AUTH0_DOMAIN,
