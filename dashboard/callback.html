@@ -1,0 +1,43 @@
+<!-- /dashboard/callback.html -->
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <title>Bezig met inloggen...</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Inloggen afronden...</h1>
+    <p>Even geduld, je wordt teruggestuurd.</p>
+  </main>
+
+  <script>
+    (async () => {
+      const AUTH0_DOMAIN = "kersmc.eu.auth0.com";
+      const AUTH0_CLIENT_ID = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A";
+
+      const auth0 = await createAuth0Client({
+        domain: AUTH0_DOMAIN,
+        client_id: AUTH0_CLIENT_ID,
+        cacheLocation: "localstorage",
+        useRefreshTokens: true
+      });
+
+      try {
+        // Verwerk callback en haal appState (target) op
+        const result = await auth0.handleRedirectCallback();
+        const target = (result && result.appState && result.appState.target) || "/dashboard/";
+
+        // redirect naar originele target
+        window.location.replace(target);
+      } catch (err) {
+        console.error("Callback error:", err);
+        // Stuur naar foutpagina
+        window.location.replace("/dashboard/fout.html");
+      }
+    })();
+  </script>
+</body>
+</html>
