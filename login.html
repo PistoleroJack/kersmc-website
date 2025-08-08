@@ -1,80 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
   <title>Login - KersMC</title>
-  <link rel="icon" type="image/png" href="/logos/KersMC_logo.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .login-box {
-      text-align: center;
-      border: 1px solid #ccc;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .login-box h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #ff0707;
-    }
-    .login-box img {
-      max-width: 150px;
-      margin-bottom: 20px;
-    }
-    .button.is-kers {
-      background-color: #ff0707;
-      color: white;
-      font-weight: bold;
-    }
-    .button.is-kers:hover {
-      background-color: #e60000;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
 </head>
 <body>
-  <div class="login-box">
-    <img src="/logos/KersMC_logo.png" alt="KersMC Logo" />
-    <h1>KersMC Inloggen</h1>
-    <p>Klik hieronder om in te loggen met je account.</p>
-    <button id="loginBtn" class="button is-kers mt-4">Log in met Auth0</button>
+  <div class="section">
+    <div class="container">
+      <div class="box" style="max-width:520px;margin:80px auto;text-align:center;">
+        <img src="/logos/KersMC_logo.png" alt="KersMC Logo" style="max-width:140px">
+        <h1 class="title is-3">Inloggen bij KersMC</h1>
+        <p>Klik op de knop om in te loggen via Auth0.</p>
+        <button id="loginBtn" class="button" style="background:#ff0707;color:white;margin-top:18px">Log in met Auth0</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Auth0 JavaScript SDK -->
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+  <!-- Auth0 SDK v2 -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+
   <script>
-    let auth0Client;
+  (async () => {
+    const AUTH0_DOMAIN = "kersmc.eu.auth0.com";
+    const AUTH0_CLIENT_ID = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A";
 
-    // Init Auth0
-    window.onload = async () => {
-      auth0Client = await createAuth0Client({
-        domain: "kersmc.eu.auth0.com",
-        client_id: "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A",
-        redirect_uri: "https://kersmc.nl/dashboard/owner"
-      });
+    // Waar willen we naartoe terugsturen? (veilig maken, alleen relatieve paden)
+    const url = new URL(window.location.href);
+    const raw = url.searchParams.get('returnTo') || '/dashboard/';
+    const returnTo = raw.startsWith('/') ? raw : '/dashboard/';
 
-      // Als je net bent teruggestuurd van Auth0, handel de redirect af
-      const query = window.location.search;
-      if (query.includes("code=") && query.includes("state=")) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/dashboard/owner");
-      }
-    };
+    const redirectUri = window.location.origin + '/dashboard/callback.html';
 
-    // Login functie
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      await auth0Client.loginWithRedirect();
+    const auth0 = await createAuth0Client({
+      domain: AUTH0_DOMAIN,
+      client_id: AUTH0_CLIENT_ID
     });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      await auth0.loginWithRedirect({
+        authorizationParams: { redirect_uri: redirectUri },
+        appState: { target: returnTo }
+      });
+    });
+  })();
   </script>
 </body>
 </html>
