@@ -1,43 +1,36 @@
-<!-- /dashboard/callback.html -->
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <title>Bezig met inloggen...</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-</head>
+  <meta charset="utf-8"><title>Bezig met inloggen...</title><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body>
-  <main>
-    <h1>Inloggen afronden...</h1>
-    <p>Even geduld, je wordt teruggestuurd.</p>
-  </main>
+  <div style="text-align:center;margin:120px auto;font-family:sans-serif">
+    <h2>Even geduld — inloggen afronden…</h2>
+  </div>
 
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script>
-    (async () => {
-      const AUTH0_DOMAIN = "kersmc.eu.auth0.com";
-      const AUTH0_CLIENT_ID = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A";
+  (async () => {
+    const AUTH0_DOMAIN = "kersmc.eu.auth0.com";
+    const AUTH0_CLIENT_ID = "OtaKg92TfevmL5KR18EsAgwdSxjOZC6A";
 
+    try {
       const auth0 = await createAuth0Client({
         domain: AUTH0_DOMAIN,
         client_id: AUTH0_CLIENT_ID,
-        cacheLocation: "localstorage",
+        cacheLocation: 'localstorage',
         useRefreshTokens: true
       });
 
-      try {
-        // Verwerk callback en haal appState (target) op
-        const result = await auth0.handleRedirectCallback();
-        const target = (result && result.appState && result.appState.target) || "/dashboard/";
-
-        // redirect naar originele target
-        window.location.replace(target);
-      } catch (err) {
-        console.error("Callback error:", err);
-        // Stuur naar foutpagina
-        window.location.replace("/dashboard/fout.html");
-      }
-    })();
+      const result = await auth0.handleRedirectCallback();
+      const target = (result && result.appState && result.appState.target) || '/dashboard/';
+      // Zorg dat target een relatieve pad is
+      const safeTarget = (typeof target === 'string' && target.startsWith('/')) ? target : '/dashboard/';
+      window.location.replace(safeTarget);
+    } catch (err) {
+      console.error('Callback error', err);
+      window.location.replace('/dashboard/fout.html');
+    }
+  })();
   </script>
 </body>
 </html>
