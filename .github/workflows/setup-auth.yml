@@ -20,6 +20,7 @@ jobs:
 
       - name: Set up authentication
         run: |
+          export PATH="$HOME/.auth0/bin:$PATH"
           chmod +x .github/workflows/setup-auth.sh
           .github/workflows/setup-auth.sh
         env:
