@@ -3,17 +3,18 @@ set -eo pipefail
 
 SITE_DOMAIN="${SITE_DOMAIN:-$REPO_NAME}"
 
-# Inloggen met de juiste scopes
+# Inloggen bij Auth0
 auth0 login \
-  --domain $AUTH0_DOMAIN \
-  --client-id $AUTH0_CLIENT_ID \
-  --client-secret $AUTH0_CLIENT_SECRET \
-  --scopes "create:clients read:connections read:users update:clients delete:clients"
+  --domain "$AUTH0_DOMAIN" \
+  --client-id "$AUTH0_CLIENT_ID" \
+  --client-secret "$AUTH0_CLIENT_SECRET" \
+  --scopes "read:users read:user_idp_tokens"
 
-auth0 tenants use $AUTH0_DOMAIN
+auth0 tenants use "$AUTH0_DOMAIN"
 
+# Nieuwe SPA App aanmaken
 export SITE_CLIENT_ID=$(auth0 apps create \
-  --name $SITE_DOMAIN \
+  --name "$SITE_DOMAIN" \
   --description "$SITE_DOMAIN" \
   --type spa \
   --callbacks "https://$SITE_DOMAIN/auth/" \
@@ -22,41 +23,28 @@ export SITE_CLIENT_ID=$(auth0 apps create \
   --web-origins "https://$SITE_DOMAIN" \
   --json --no-input -r | jq -r '.client_id')
 
+# Alle bestaande connections uitzetten
 auth0 api connections | jq -r '.[].id' | xargs -I{} auth0 api patch connections/{} --data '{"enabled_clients":[]}'
 
+# GitHub connection toevoegen
 cat <<EOF | auth0 api post connections
 {
   "options": {
     "client_id": "$GH_CLIENT_ID",
     "client_secret": "$GH_CLIENT_SECRET",
-    "gist": false,
     "repo": true,
-    "email": false,
-    "scope": ["repo"],
-    "follow": false,
-    "profile": true,
-    "read_org": false,
-    "admin_org": false,
-    "read_user": false,
-    "write_org": false,
-    "delete_repo": false,
-    "public_repo": false,
-    "repo_status": false,
-    "notifications": false,
-    "read_repo_hook": false,
-    "admin_repo_hook": false,
-    "read_public_key": false,
-    "repo_deployment": false,
-    "write_repo_hook": false,
-    "admin_public_key": false,
-    "write_public_key": false
+    "scope": [ "repo" ],
+    "profile": true
   },
   "strategy": "github",
   "name": "github",
-  "enabled_clients": ["$SITE_CLIENT_ID"]
+  "enabled_clients": [
+    "$SITE_CLIENT_ID"
+  ]
 }
 EOF
 
+# Login action toevoegen
 export ACTION_ID=$(auth0 actions create \
   --name on-login \
   --trigger post-login \
@@ -69,18 +57,21 @@ export ACTION_ID=$(auth0 actions create \
   --json | jq -r '.id')
 
 sleep 3
-auth0 actions deploy $ACTION_ID
+auth0 actions deploy "$ACTION_ID"
 
 auth0 api patch actions/triggers/post-login/bindings --data '{"bindings": [{"display_name": "on-login", "ref": {"type": "action_name", "value": "on-login"}}]}'
 
+# Client-grants bijwerken
 export GRANT_ID=$(auth0 api client-grants | jq -r '.[].id')
 auth0 api patch client-grants/$GRANT_ID --data '{"scope": ["read:user_idp_tokens", "read:users"]}'
 
+# Public map kopiëren en aanpassen
 mkdir -p /tmp
 cp -r ../../public /tmp/public
 export SETTINGS="{domain: \"$AUTH0_DOMAIN\", clientId: \"$SITE_CLIENT_ID\"};"
 sed -i "s|{}; //<<|$SETTINGS|" /tmp/public/auth/index.html
 
+# Commit naar public branch
 cd ../..
 if git ls-remote --heads origin | grep -q "refs/heads/public"; then
   git fetch origin public
@@ -88,6 +79,7 @@ if git ls-remote --heads origin | grep -q "refs/heads/public"; then
 else
   git switch --orphan public --
 fi
+
 find . -not -path './.git*' -not -name '.' -exec rm -rf {} +
 tar -C /tmp/public -cf - . | tar -xvf -
 echo $SITE_DOMAIN > CNAME
