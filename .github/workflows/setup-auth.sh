@@ -1,97 +1,34 @@
 #!/bin/bash
 set -eo pipefail
 
-# Auth0 CLI installeren (indien nog niet aanwezig)
+echo "=== Setup authentication ==="
+
+# Controleer of Auth0 CLI geïnstalleerd is, anders installeren
 if ! command -v auth0 &> /dev/null; then
-  echo "Installing Auth0 CLI..."
+  echo "Auth0 CLI niet gevonden, installeren..."
   curl -sSfL https://raw.githubusercontent.com/auth0/auth0-cli/main/install.sh | sh
   export PATH="$HOME/.auth0/bin:$PATH"
+  echo "PATH bijgewerkt: $PATH"
+else
+  echo "Auth0 CLI gevonden: $(command -v auth0)"
 fi
 
-SITE_DOMAIN="${SITE_DOMAIN:-$REPO_NAME}"
+# Absolute pad naar Auth0 CLI bepalen
+AUTH0_BIN=$(command -v auth0 || echo "$HOME/.auth0/bin/auth0")
+if [ ! -x "$AUTH0_BIN" ]; then
+  echo "Fout: Auth0 CLI kon niet worden gevonden of uitgevoerd."
+  exit 1
+fi
 
-# Inloggen bij Auth0
-auth0 login \
+echo "Auth0 CLI pad: $AUTH0_BIN"
+
+# Login bij Auth0
+"$AUTH0_BIN" login \
   --domain "$AUTH0_DOMAIN" \
   --client-id "$AUTH0_CLIENT_ID" \
-  --client-secret "$AUTH0_CLIENT_SECRET" \
-  --scopes "read:users read:user_idp_tokens"
+  --client-secret "$AUTH0_CLIENT_SECRET"
 
-auth0 tenants use "$AUTH0_DOMAIN"
+# Indien je een tenant moet selecteren
+"$AUTH0_BIN" tenants use "$AUTH0_DOMAIN"
 
-# Nieuwe SPA App aanmaken
-export SITE_CLIENT_ID=$(auth0 apps create \
-  --name "$SITE_DOMAIN" \
-  --description "$SITE_DOMAIN" \
-  --type spa \
-  --callbacks "https://$SITE_DOMAIN/auth/" \
-  --logout-urls "https://$SITE_DOMAIN/auth/" \
-  --origins "https://$SITE_DOMAIN" \
-  --web-origins "https://$SITE_DOMAIN" \
-  --json --no-input -r | jq -r '.client_id')
-
-# Alle bestaande connections uitzetten
-auth0 api connections | jq -r '.[].id' | xargs -I{} auth0 api patch connections/{} --data '{"enabled_clients":[]}'
-
-# GitHub connection toevoegen
-cat <<EOF | auth0 api post connections
-{
-  "options": {
-    "client_id": "$GH_CLIENT_ID",
-    "client_secret": "$GH_CLIENT_SECRET",
-    "repo": true,
-    "scope": [ "repo" ],
-    "profile": true
-  },
-  "strategy": "github",
-  "name": "github",
-  "enabled_clients": [
-    "$SITE_CLIENT_ID"
-  ]
-}
-EOF
-
-# Login action toevoegen
-export ACTION_ID=$(auth0 actions create \
-  --name on-login \
-  --trigger post-login \
-  --code "$(cat on-login.js)" \
-  --dependency "auth0=latest" \
-  --secret "domain=$AUTH0_DOMAIN" \
-  --secret "admin=$SITE_ADMIN" \
-  --secret "clientId=$AUTH0_CLIENT_ID" \
-  --secret "clientSecret=$AUTH0_CLIENT_SECRET" \
-  --json | jq -r '.id')
-
-sleep 3
-auth0 actions deploy "$ACTION_ID"
-
-auth0 api patch actions/triggers/post-login/bindings --data '{"bindings": [{"display_name": "on-login", "ref": {"type": "action_name", "value": "on-login"}}]}'
-
-# Client-grants bijwerken
-export GRANT_ID=$(auth0 api client-grants | jq -r '.[].id')
-auth0 api patch client-grants/$GRANT_ID --data '{"scope": ["read:user_idp_tokens", "read:users"]}'
-
-# Public map kopiëren en aanpassen
-mkdir -p /tmp
-cp -r ../../public /tmp/public
-export SETTINGS="{domain: \"$AUTH0_DOMAIN\", clientId: \"$SITE_CLIENT_ID\"};"
-sed -i "s|{}; //<<|$SETTINGS|" /tmp/public/auth/index.html
-
-# Commit naar public branch
-cd ../..
-if git ls-remote --heads origin | grep -q "refs/heads/public"; then
-  git fetch origin public
-  git checkout public --
-else
-  git switch --orphan public --
-fi
-
-find . -not -path './.git*' -not -name '.' -exec rm -rf {} +
-tar -C /tmp/public -cf - . | tar -xvf -
-echo $SITE_DOMAIN > CNAME
-git add .
-git config --global user.name 'Robot'
-git config --global user.email 'robot@users.noreply.github.com'
-git commit -m "initial setup"
-git push origin public
+echo "=== Authenticatie afgerond ==="
