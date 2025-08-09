@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eo pipefail
 
+# Auth0 CLI installeren (indien nog niet aanwezig)
+if ! command -v auth0 &> /dev/null; then
+  echo "Installing Auth0 CLI..."
+  curl -sSfL https://raw.githubusercontent.com/auth0/auth0-cli/main/install.sh | sh
+  export PATH="$HOME/.auth0/bin:$PATH"
+fi
+
 SITE_DOMAIN="${SITE_DOMAIN:-$REPO_NAME}"
 
 # Inloggen bij Auth0
