@@ -1,28 +1,28 @@
-name: setup-site
+name: setup
 
 on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  setup-site:
     runs-on: ubuntu-latest
     steps:
       - name: Set up job
         uses: actions/checkout@v3
 
       - name: Install jq
-        run: sudo apt-get install jq -y
+        run: sudo apt-get install -y jq
 
       - name: Install Auth0 CLI
         run: |
-          curl -sSfL https://raw.githubusercontent.com/auth0/auth0-cli/main/install.sh | sh
-          echo "$HOME/.auth0/bin" >> $GITHUB_PATH
+          curl -sSfL https://github.com/auth0/auth0-cli/releases/latest/download/auth0-cli_$(uname -s)_$(uname -m).tar.gz \
+            | sudo tar -xz -C /usr/local/bin
 
       - name: Set up authentication
         run: |
-          export PATH="$HOME/.auth0/bin:$PATH"
           chmod +x .github/workflows/setup-auth.sh
-          .github/workflows/setup-auth.sh
+          ./.github/workflows/setup-auth.sh
+        shell: bash
         env:
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
