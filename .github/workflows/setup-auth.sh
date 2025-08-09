@@ -3,17 +3,17 @@ set -eo pipefail
 
 SITE_DOMAIN="${SITE_DOMAIN:-$REPO_NAME}"
 
-# Login met extra scopes zodat create:clients en update:connections werken
+# Inloggen met de juiste scopes
 auth0 login \
-  --domain "$AUTH0_DOMAIN" \
-  --client-id "$AUTH0_CLIENT_ID" \
-  --client-secret "$AUTH0_CLIENT_SECRET" \
-  --scopes "create:clients update:connections read:connections read:clients create:connections"
+  --domain $AUTH0_DOMAIN \
+  --client-id $AUTH0_CLIENT_ID \
+  --client-secret $AUTH0_CLIENT_SECRET \
+  --scopes "create:clients read:connections read:users update:clients delete:clients"
 
-auth0 tenants use "$AUTH0_DOMAIN"
+auth0 tenants use $AUTH0_DOMAIN
 
 export SITE_CLIENT_ID=$(auth0 apps create \
-  --name "$SITE_DOMAIN" \
+  --name $SITE_DOMAIN \
   --description "$SITE_DOMAIN" \
   --type spa \
   --callbacks "https://$SITE_DOMAIN/auth/" \
@@ -31,14 +31,29 @@ cat <<EOF | auth0 api post connections
     "client_secret": "$GH_CLIENT_SECRET",
     "gist": false,
     "repo": true,
+    "email": false,
     "scope": ["repo"],
-    "profile": true
+    "follow": false,
+    "profile": true,
+    "read_org": false,
+    "admin_org": false,
+    "read_user": false,
+    "write_org": false,
+    "delete_repo": false,
+    "public_repo": false,
+    "repo_status": false,
+    "notifications": false,
+    "read_repo_hook": false,
+    "admin_repo_hook": false,
+    "read_public_key": false,
+    "repo_deployment": false,
+    "write_repo_hook": false,
+    "admin_public_key": false,
+    "write_public_key": false
   },
   "strategy": "github",
   "name": "github",
-  "enabled_clients": [
-    "$SITE_CLIENT_ID"
-  ]
+  "enabled_clients": ["$SITE_CLIENT_ID"]
 }
 EOF
 
@@ -54,7 +69,7 @@ export ACTION_ID=$(auth0 actions create \
   --json | jq -r '.id')
 
 sleep 3
-auth0 actions deploy "$ACTION_ID"
+auth0 actions deploy $ACTION_ID
 
 auth0 api patch actions/triggers/post-login/bindings --data '{"bindings": [{"display_name": "on-login", "ref": {"type": "action_name", "value": "on-login"}}]}'
 
@@ -73,11 +88,9 @@ if git ls-remote --heads origin | grep -q "refs/heads/public"; then
 else
   git switch --orphan public --
 fi
-
 find . -not -path './.git*' -not -name '.' -exec rm -rf {} +
 tar -C /tmp/public -cf - . | tar -xvf -
 echo $SITE_DOMAIN > CNAME
-
 git add .
 git config --global user.name 'Robot'
 git config --global user.email 'robot@users.noreply.github.com'
