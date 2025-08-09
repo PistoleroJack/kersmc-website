@@ -3,12 +3,16 @@ set -eo pipefail
 
 SITE_DOMAIN="${SITE_DOMAIN:-$REPO_NAME}"
 
+# Login met alle vereiste scopes
 auth0 login \
   --domain $AUTH0_DOMAIN \
   --client-id $AUTH0_CLIENT_ID \
-  --client-secret $AUTH0_CLIENT_SECRET
+  --client-secret $AUTH0_CLIENT_SECRET \
+  --scopes "create:clients read:connections update:connections read:users read:user_idp_tokens"
+
 auth0 tenants use $AUTH0_DOMAIN
 
+# Maak de SPA-applicatie aan
 export SITE_CLIENT_ID=$(auth0 apps create \
   --name $SITE_DOMAIN \
   --description "$SITE_DOMAIN" \
@@ -19,7 +23,10 @@ export SITE_CLIENT_ID=$(auth0 apps create \
   --web-origins "https://$SITE_DOMAIN" \
   --json --no-input -r | jq -r '.client_id')
 
+# Reset alle bestaande connections
 auth0 api connections | jq -r '.[].id' | xargs -I{} auth0 api patch connections/{} --data '{"enabled_clients":[]}'
+
+# Voeg GitHub connection toe
 cat <<EOF | auth0 api post connections
 {
   "options": {
@@ -57,6 +64,7 @@ cat <<EOF | auth0 api post connections
 }
 EOF
 
+# Maak en deploy de on-login Action
 export ACTION_ID=$(auth0 actions create \
   --name on-login \
   --trigger post-login \
@@ -67,19 +75,24 @@ export ACTION_ID=$(auth0 actions create \
   --secret "clientId=$AUTH0_CLIENT_ID" \
   --secret "clientSecret=$AUTH0_CLIENT_SECRET" \
   --json | jq -r '.id')
+
 sleep 3
 auth0 actions deploy $ACTION_ID
 
+# Bind de Action aan het post-login trigger
 auth0 api patch actions/triggers/post-login/bindings --data '{"bindings": [{"display_name": "on-login", "ref": {"type": "action_name", "value": "on-login"}}]}'
 
+# Pas client-grant scopes aan
 export GRANT_ID=$(auth0 api client-grants | jq -r '.[].id')
 auth0 api patch client-grants/$GRANT_ID --data '{"scope": ["read:user_idp_tokens", "read:users"]}'
 
+# Kopieer public map naar tijdelijke locatie en pas settings in index.html aan
 mkdir -p /tmp
 cp -r ../../public /tmp/public
 export SETTINGS="{domain: \"$AUTH0_DOMAIN\", clientId: \"$SITE_CLIENT_ID\"};"
 sed -i "s|{}; //<<|$SETTINGS|" /tmp/public/auth/index.html
 
+# Zet alles op de public branch
 cd ../..
 if git ls-remote --heads origin | grep -q "refs/heads/public"; then
   git fetch origin public
@@ -87,6 +100,7 @@ if git ls-remote --heads origin | grep -q "refs/heads/public"; then
 else
   git switch --orphan public --
 fi
+
 find . -not -path './.git*' -not -name '.' -exec rm -rf {} +
 tar -C /tmp/public -cf - . | tar -xvf -
 echo $SITE_DOMAIN > CNAME
@@ -95,4 +109,3 @@ git config --global user.name 'Robot'
 git config --global user.email 'robot@users.noreply.github.com'
 git commit -m "initial setup"
 git push origin public
-
