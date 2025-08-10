@@ -1,0 +1,33 @@
+/* popup.css - simple styles for the modal popup */
+#download-popup-root.hidden { display: none; }
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 9998;
+}
+.popup-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  z-index: 9999;
+  max-width: 520px;
+  width: 90%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 1rem;
+  font-family: sans-serif;
+}
+.popup-header h3 { margin: 0 0 0.5rem 0; }
+.popup-body { margin-bottom: 1rem; color: #333; }
+.popup-actions { text-align: right; }
+.btn { padding: .5rem .9rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; }
+.btn-confirm { background: #2ecc71; color: white; margin-right: .5rem; }
+.btn-cancel { background: #e74c3c; color: white; }
+@media (max-width:420px){
+  .popup-modal { padding: .8rem; }
+  .popup-actions { display:flex; gap:.5rem; justify-content:stretch; }
+  .btn { flex:1; }
+}
