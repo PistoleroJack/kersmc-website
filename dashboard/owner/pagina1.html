@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Voorbeeld Pagina 1 - Owner Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" href="/dashboard/css/main.css">
+  <link rel="icon" href="/logos/KersMC_logo.png">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3">Voorbeeld Pagina 1</h2>
+      <p>Welkom op de voorbeeldpagina! Hier kun je eigen content toevoegen.</p>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch("/dashboard/partials/dashboard-header-owner.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("header-placeholder").innerHTML = data);
+
+    fetch("/dashboard/partials/dashboard-footer.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("footer-placeholder").innerHTML = data);
+  </script>
+</body>
+</html>
