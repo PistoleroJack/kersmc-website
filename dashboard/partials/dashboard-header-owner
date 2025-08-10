@@ -1,0 +1,7 @@
+<section class="hero is-danger py-4">
+  <div class="hero-body is-flex is-justify-content-space-between is-align-items-center px-6">
+    <a href="/dashboard/owner" class="button is-light is-medium">← Terug naar Dashboard</a>
+    <h1 class="title has-text-white is-size-2">KersMC | Owner</h1>
+    <button id="logout-btn" class="button is-light is-medium">Uitloggen</button>
+  </div>
+</section>
