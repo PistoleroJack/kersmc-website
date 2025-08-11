@@ -12,36 +12,41 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 360px; /* Dubbel zo hoog */
+      height: 360px;
       background: #f5f5f5;
       border-radius: 8px;
       padding: 1rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
     .news-tile:hover {
       transform: scale(1.02);
     }
-    .news-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
     .news-text {
       flex: 1;
-      padding-right: 1rem;
+      text-align: left;
+    }
+    .news-text h3 {
+      font-size: 2rem; /* Titel 2x zo groot */
+      margin-bottom: 0.5rem;
     }
     .news-image {
-      width: 120px;
-      height: 120px;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
+      background: transparent;
     }
     .tile-link {
       color: inherit;
       text-decoration: none;
     }
     .date-footer {
-      text-align: right;
+      text-align: left;
       font-size: 0.85rem;
       color: #666;
       margin-top: 0.5rem;
@@ -58,11 +63,10 @@
       <!-- Eerste tegel: geen artikelen -->
       <div class="column is-half">
         <div class="news-tile">
-          <div class="news-content">
-            <div class="news-text">
-              <h3 class="title is-5">Er zijn nog geen nieuws artikelen.</h3>
-              <p>Kom later terug voor het laatste nieuws!</p>
-            </div>
+          <img src="logos/placeholder.png" alt="Afbeelding" class="news-image">
+          <div class="news-text">
+            <h3>Er zijn nog geen nieuws artikelen.</h3>
+            <p>Kom later terug voor het laatste nieuws!</p>
           </div>
           <div class="date-footer">
             11 augustus 2025
@@ -72,14 +76,12 @@
 
       <!-- Tweede tegel: Discord advertentie -->
       <div class="column is-half">
-        <a href="https://discord.gg/jouwdiscord" target="_blank" class="tile-link">
+        <a href="https://kersmc.nl/discord" target="_blank" class="tile-link">
           <div class="news-tile" style="background-color: #5865F2; color: white;">
-            <div class="news-content">
-              <div class="news-text">
-                <h3 class="title is-5">Word lid van onze Discord!</h3>
-                <p>Praat mee, krijg updates en sluit je aan bij de community.</p>
-              </div>
-              <img src="logos/discord.png" alt="Discord" class="news-image">
+            <img src="logos/discord.png" alt="Discord" class="news-image">
+            <div class="news-text">
+              <h3>Word lid van onze Discord!</h3>
+              <p>Praat mee, krijg updates en sluit je aan bij de community.</p>
             </div>
             <div class="date-footer" style="color: #ccc;">
               10 augustus 2025
