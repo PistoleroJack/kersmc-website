@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nieuws - KersMC</title>
+  <link rel="icon" type="image/png" href="logos/KersMC_logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .news-tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 360px; /* Dubbel zo hoog */
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    .news-tile:hover {
+      transform: scale(1.02);
+    }
+    .news-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .news-text {
+      flex: 1;
+      padding-right: 1rem;
+    }
+    .news-image {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+    .tile-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .date-footer {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <section class="section">
+    <h1 class="title">Nieuws</h1>
+    <div class="columns is-multiline">
+      
+      <!-- Eerste tegel: geen artikelen -->
+      <div class="column is-half">
+        <div class="news-tile">
+          <div class="news-content">
+            <div class="news-text">
+              <h3 class="title is-5">Er zijn nog geen nieuws artikelen.</h3>
+              <p>Kom later terug voor het laatste nieuws!</p>
+            </div>
+          </div>
+          <div class="date-footer">
+            11 augustus 2025
+          </div>
+        </div>
+      </div>
+
+      <!-- Tweede tegel: Discord advertentie -->
+      <div class="column is-half">
+        <a href="https://discord.gg/jouwdiscord" target="_blank" class="tile-link">
+          <div class="news-tile" style="background-color: #5865F2; color: white;">
+            <div class="news-content">
+              <div class="news-text">
+                <h3 class="title is-5">Word lid van onze Discord!</h3>
+                <p>Praat mee, krijg updates en sluit je aan bij de community.</p>
+              </div>
+              <img src="logos/discord.png" alt="Discord" class="news-image">
+            </div>
+            <div class="date-footer" style="color: #ccc;">
+              10 augustus 2025
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    function loadHTML(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadHTML("header-placeholder", "partials/header.html");
+    loadHTML("footer-placeholder", "partials/footer.html");
+  </script>
+</body>
+</html>
