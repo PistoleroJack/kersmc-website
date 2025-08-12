@@ -1,23 +1,100 @@
-<form id="redirect-form">
-  <label>Vul je rol in:</label>
-  <input type="text" id="role" placeholder="Vul hier de rol in die je hebt">
-  <button type="submit">Ga verder</button>
-</form>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KersMC</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
 
-<script>
-document.getElementById('redirect-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const role = document.getElementById('role').value.trim().toLowerCase();
-  const domains = {
-    owner: "https://owner.kersmc.nl",
-    speler: "https://speler.kersmc.nl",
-    omega: "https://omega.kersmc.nl",
-    admin: "https://admin.kersmc.nl"
-  };
-  if (domains[role]) {
-    window.location.href = domains[role];
-  } else {
-    alert("Onbekende rol!");
-  }
-});
-</script>
+        .login-container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: red; /* Titel rood */
+        }
+
+        .login-container p {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .login-container input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-container button {
+            background-color: #A0C213;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #8cab11;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>KersMC inlog</h1>
+        <p>Voer je toegangscode in</p>
+        <input type="password" id="passwordInput" placeholder="Wachtwoord">
+        <p id="errorMessage" class="error-message" style="display: none;">Onjuist wachtwoord. Probeer opnieuw.</p>
+        <button id="loginButton">Inloggen</button>
+    </div>
+
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Toegangscodes en bijbehorende doorverwijzingen
+        const routes = {
+            "owner": "https://owner.kersmc.nl",
+            "omega": "https://omega.kersmc.nl",
+            "admin": "https://admin.kersmc.nl",
+            "speler": "https://speler.kersmc.nl"
+        };
+
+        loginButton.addEventListener('click', () => {
+            const enteredPassword = passwordInput.value.trim();
+
+            if (routes[enteredPassword]) {
+                window.location.href = routes[enteredPassword];
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
