@@ -1,0 +1,23 @@
+<form id="redirect-form">
+  <label>Vul je rol in:</label>
+  <input type="text" id="role" placeholder="Vul hier de rol in die je hebt">
+  <button type="submit">Ga verder</button>
+</form>
+
+<script>
+document.getElementById('redirect-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const role = document.getElementById('role').value.trim().toLowerCase();
+  const domains = {
+    owner: "https://owner.kersmc.nl",
+    speler: "https://speler.kersmc.nl",
+    omega: "https://omega.kersmc.nl",
+    admin: "https://admin.kersmc.nl"
+  };
+  if (domains[role]) {
+    window.location.href = domains[role];
+  } else {
+    alert("Onbekende rol!");
+  }
+});
+</script>
